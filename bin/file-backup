@@ -9,10 +9,9 @@ process.on('uncaughtException', fail);
 var async   = require('async');
 var config  = require('../config');
 var dropbox = require('../lib/dropbox-sync');
-var mysql   = require('../lib/mysql-backup');
 var tarball = require('../lib/tarball');
 var clean   = require('../lib/clean');
-var outFile = config.mysql.file_prefix + 'backup-' + Date.now();
+var outFile = config.file.file_prefix + 'webroot-' + Date.now();
 
 async.series({
   connect: function (cb) {
@@ -22,25 +21,17 @@ async.series({
     });
 
     dropbox.setServerPrefix(config.server);
-    dropbox.setDirectory(config.mysql.directory);
-
-    mysql.connect({
-      host: config.mysql.hostname,
-      user: config.mysql.username,
-      password: config.mysql.password
-    });
+    dropbox.setDirectory(config.file.directory);
 
     cb();
   },
-  backup: mysql.backup.bind(mysql, outFile),
-  archive: tarball.create.bind(tarball, outFile),
+  archive: tarball.create.bind(tarball, outFile, config.file.include),
   sync: dropbox.send.bind(dropbox, outFile),
   clean: clean.bind(clean, outFile)
 }, function (err, args) {
   if (err) return fail(err);
 
-  console.log('The MySQL backup has been completed successfully.\n');
-  console.log('Backed up %d tables from %d databases.\n', args.backup.tables, args.backup.databases);
+  console.log('The file system backup has been completed successfully.\n');
   console.timeEnd('Total execution time');
   console.log('\nThe backup file has been saved to your Dropbox: %s (%s)', args.sync.path, args.sync.humanSize);
   process.exit(0);
@@ -49,7 +40,7 @@ async.series({
 function fail (err) {
   clean(outFile);
 
-  console.error('The MySQL backup job has encountered a fatal error and could not continue.\n');
+  console.error('The file system backup job has encountered a fatal error and could not continue.\n');
   console.error(err);
 
   process.exit(1);
