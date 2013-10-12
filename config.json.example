@@ -1,0 +1,26 @@
+{
+  "server": "",
+  "dropbox": {
+    "key": "",
+    "secret": "",
+    "dir_folder": "webroot"
+  },
+  "mysql": {
+    "file_prefix": "",
+    "directory": "mysql",
+    "hostname": "localhost",
+    "username": "root",
+    "password": "",
+    "max_daily": 30,
+    "max_weekly": 0,
+    "max_monthly": 0
+  },
+  "dir_backups": {
+    "include": [
+      "/var/www/html"
+    ],
+    "max_daily": 3,
+    "max_weekly": 8,
+    "max_monthly": 0
+  }
+}
