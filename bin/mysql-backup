@@ -21,7 +21,6 @@ async.series({
       secret: config.dropbox.secret
     });
 
-    dropbox.setServerPrefix(config.server);
     dropbox.setDirectory(config.mysql.directory);
 
     mysql.connect({
