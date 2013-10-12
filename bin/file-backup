@@ -32,6 +32,7 @@ async.series({
   if (err) return fail(err);
 
   console.log('The file system backup has been completed successfully.\n');
+  console.log('Directories backed up: %s\n', config.file.include.join(', '));
   console.timeEnd('Total execution time');
   console.log('\nThe backup file has been saved to your Dropbox: %s (%s)', args.sync.path, args.sync.humanSize);
   process.exit(0);
