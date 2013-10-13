@@ -30,7 +30,8 @@
     "async": "0.2.x",
     "mysql": "2.0.x",
     "dropbox": "0.10.x",
-    "rimraf": "2.2.x"
+    "rimraf": "2.2.x",
+    "moment": "2.0.x"
   },
   "license": "MIT",
   "engines": {

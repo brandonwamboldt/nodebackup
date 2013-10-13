@@ -6,12 +6,14 @@
 console.time('Total execution time');
 process.on('uncaughtException', fail);
 
+var which   = process.argv[process.argv.length - 1];
 var async   = require('async');
+var moment  = require('moment');
 var config  = require('../config');
 var dropbox = require('../lib/dropbox-sync');
 var tarball = require('../lib/tarball');
 var clean   = require('../lib/clean');
-var outFile = config.file[0].file_prefix + 'webroot-' + Date.now();
+var outFile = config.file[which].file_prefix + 'webroot-' + moment().format('YYYYMMDD-HHmmss');
 
 async.series({
   connect: function (cb) {
@@ -20,18 +22,18 @@ async.series({
       secret: config.drivers.dropbox.secret
     });
 
-    dropbox.setDirectory(config.file[0].directory);
+    dropbox.setDirectory(config.file[which].directory);
 
     cb();
   },
-  archive: tarball.create.bind(tarball, outFile, config.file[0].include),
+  archive: tarball.create.bind(tarball, outFile, config.file[which].include),
   sync: dropbox.send.bind(dropbox, outFile),
   clean: clean.bind(clean, outFile)
 }, function (err, args) {
   if (err) return fail(err);
 
   console.log('The file system backup has been completed successfully.\n');
-  console.log('Directories backed up: %s\n', config.file[0].include.join(', '));
+  console.log('Directories backed up: %s\n', config.file[which].include.join(', '));
   console.timeEnd('Total execution time');
   console.log('\nThe backup file has been saved to your Dropbox: %s (%s)', args.sync.path, args.sync.humanSize);
   process.exit(0);

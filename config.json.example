@@ -16,30 +16,38 @@
       "region": "us-west-2"
     }
   },
-  "mysql": [
-    {
+  "mysql": {
+    "nightly": {
+      "comment": "Nightly Backups",
       "driver": "dropbox",
       "file_prefix": "",
       "directory": "mysql",
       "hostname": "localhost",
       "username": "root",
       "password": "",
-      "max_daily": 30,
-      "max_weekly": 0,
-      "max_monthly": 0
+      "rotate": 60
     }
-  ],
-  "file": [
-    {
+  },
+  "file": {
+    "nightly": {
+      "comment": "Nightly Backups",
       "driver": "dropbox",
       "include": [
         "/var/www/html"
       ],
       "file_prefix": "",
-      "directory": "webroot",
-      "max_daily": 3,
-      "max_weekly": 8,
-      "max_monthly": 0
+      "directory": "webroot_nightly",
+      "rotate": 7
+    },
+    "weekly": {
+      "comment": "Weekly Backups",
+      "driver": "dropbox",
+      "include": [
+        "/var/www/html"
+      ],
+      "file_prefix": "",
+      "directory": "webroot_weekly",
+      "rotate": 12
     }
-  ]
+  }
 }
