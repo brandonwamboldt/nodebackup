@@ -11,34 +11,34 @@ var config  = require('../config');
 var dropbox = require('../lib/dropbox-sync');
 var tarball = require('../lib/tarball');
 var clean   = require('../lib/clean');
-var outFile = config.file.file_prefix + 'webroot-' + Date.now();
+var outFile = config.file[0].file_prefix + 'webroot-' + Date.now();
 
 async.series({
   connect: function (cb) {
     dropbox.connect({
-      key: config.dropbox.key,
-      secret: config.dropbox.secret
+      key: config.drivers.dropbox.key,
+      secret: config.drivers.dropbox.secret
     });
 
-    dropbox.setDirectory(config.file.directory);
+    dropbox.setDirectory(config.file[0].directory);
 
     cb();
   },
-  archive: tarball.create.bind(tarball, outFile, config.file.include),
+  archive: tarball.create.bind(tarball, outFile, config.file[0].include),
   sync: dropbox.send.bind(dropbox, outFile),
   clean: clean.bind(clean, outFile)
 }, function (err, args) {
   if (err) return fail(err);
 
   console.log('The file system backup has been completed successfully.\n');
-  console.log('Directories backed up: %s\n', config.file.include.join(', '));
+  console.log('Directories backed up: %s\n', config.file[0].include.join(', '));
   console.timeEnd('Total execution time');
   console.log('\nThe backup file has been saved to your Dropbox: %s (%s)', args.sync.path, args.sync.humanSize);
   process.exit(0);
 });
 
 function fail (err) {
-  clean(outFile);
+  clean && clean(outFile);
 
   console.error('The file system backup job has encountered a fatal error and could not continue.\n');
   console.error(err);

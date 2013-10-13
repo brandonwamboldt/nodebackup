@@ -1,26 +1,45 @@
 {
-  "dropbox": {
-    "key": "",
-    "secret": ""
+  "drivers": {
+    "dropbox": {
+      "key": "your-key-here",
+      "secret": "your-secret-here"
+    },
+    "google_drive": {
+      "client_id": "YOUR CLIENT ID HERE",
+      "client_secret": "YOUR CLIENT SECRET HERE",
+      "redirect_uri": "YOUR REDIRECT URL HERE",
+      "scope": "https://www.googleapis.com/auth/drive.files"
+    },
+    "aws": {
+      "access_key_id": "akid",
+      "secret_access_key": "secret",
+      "region": "us-west-2"
+    }
   },
-  "mysql": {
-    "file_prefix": "",
-    "directory": "mysql",
-    "hostname": "localhost",
-    "username": "root",
-    "password": "",
-    "max_daily": 30,
-    "max_weekly": 0,
-    "max_monthly": 0
-  },
-  "file": {
-    "include": [
-      "/var/www/html"
-    ],
-    "file_prefix": "",
-    "directory": "webroot",
-    "max_daily": 3,
-    "max_weekly": 8,
-    "max_monthly": 0
-  }
+  "mysql": [
+    {
+      "driver": "dropbox",
+      "file_prefix": "",
+      "directory": "mysql",
+      "hostname": "localhost",
+      "username": "root",
+      "password": "",
+      "max_daily": 30,
+      "max_weekly": 0,
+      "max_monthly": 0
+    }
+  ],
+  "file": [
+    {
+      "driver": "dropbox",
+      "include": [
+        "/var/www/html/nodeftpd"
+      ],
+      "file_prefix": "",
+      "directory": "webroot",
+      "max_daily": 3,
+      "max_weekly": 8,
+      "max_monthly": 0
+    }
+  ]
 }

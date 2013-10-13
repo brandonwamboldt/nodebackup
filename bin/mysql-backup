@@ -12,21 +12,21 @@ var dropbox = require('../lib/dropbox-sync');
 var mysql   = require('../lib/mysql-backup');
 var tarball = require('../lib/tarball');
 var clean   = require('../lib/clean');
-var outFile = config.mysql.file_prefix + 'backup-' + Date.now();
+var outFile = config.mysql[0].file_prefix + 'backup-' + Date.now();
 
 async.series({
   connect: function (cb) {
     dropbox.connect({
-      key: config.dropbox.key,
-      secret: config.dropbox.secret
+      key: config.drivers.dropbox.key,
+      secret: config.drivers.dropbox.secret
     });
 
-    dropbox.setDirectory(config.mysql.directory);
+    dropbox.setDirectory(config.mysql[0].directory);
 
     mysql.connect({
-      host: config.mysql.hostname,
-      user: config.mysql.username,
-      password: config.mysql.password
+      host: config.mysql[0].hostname,
+      user: config.mysql[0].username,
+      password: config.mysql[0].password
     });
 
     cb();
@@ -46,7 +46,7 @@ async.series({
 });
 
 function fail (err) {
-  clean(outFile);
+  clean && clean(outFile);
 
   console.error('The MySQL backup job has encountered a fatal error and could not continue.\n');
   console.error(err);
