@@ -33,7 +33,7 @@
     {
       "driver": "dropbox",
       "include": [
-        "/var/www/html/nodeftpd"
+        "/var/www/html"
       ],
       "file_prefix": "",
       "directory": "webroot",
