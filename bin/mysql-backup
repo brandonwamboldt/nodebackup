@@ -3,9 +3,9 @@
 
 /* jshint node: true */
 
-console.time('Total execution time');
 process.on('uncaughtException', fail);
 
+var start   = +new Date();
 var which   = process.argv[process.argv.length - 1];
 var async   = require('async');
 var moment  = require('moment');
@@ -43,7 +43,7 @@ async.series({
 
   console.log('The MySQL backup has been completed successfully.\n');
   console.log('Backed up %d tables from %d databases.\n', args.backup.tables, args.backup.databases);
-  console.timeEnd('Total execution time');
+  console.log('Total execution time: %d seconds', ((+new Date() - start) / 1000).toFixed(2));
   console.log('\nThe backup file has been saved to your Dropbox: %s (%s)', args.sync.path, args.sync.humanSize);
   process.exit(0);
 });
